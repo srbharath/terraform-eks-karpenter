@@ -295,7 +295,9 @@ resource "kubectl_manifest" "karpenter_node_template" {
 }
 
 # After that run the following commnads
+
 terraform init
+
 terraform apply --auto-approve
 
 # First Use
