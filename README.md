@@ -51,7 +51,7 @@ data "aws_partition" "current" {}
 data "aws_availability_zones" "available" {}
 data "aws_ecrpublic_authorization_token" "token" {}
 
-
+-----------------------------------------------------------------------
 # Create a Cluster
 We’re going to use three different Terraform modules to create our cluster
 
@@ -136,14 +136,14 @@ module "eks" {
     }
   }
 }
-
+-----------------------------------------------------------------------------
 # Create the EC2 Spot Service Linked Role
 This step is only necessary if this is the first time you’re using EC2 Spot in this account.
 
 aws iam create-service-linked-role --aws-service-name spot.amazonaws.com
 #If the role has already been successfully created, you will see:
 #An error occurred (InvalidInput) when calling the CreateServiceLinkedRole operation: Service role name AWSServiceRoleForEC2Spot has been taken in this account, please try a different suffix.
-
+---------------------------------------------------------------------------
 # Create the Karpenter AWS Resources 
 
 Add the following to your main.tf to create:
@@ -168,7 +168,7 @@ module "karpenter" {
   iam_role_arn    = module.eks.eks_managed_node_groups["initial"].iam_role_arn
 }
 
-
+------------------------------------------------------------------------------
 # Install Karpenter Helm Chart
 
 We are going to use the helm_release Terraform resource to do the deploy and pass in the cluster details and IAM role Karpenter needs to assume.
@@ -295,20 +295,19 @@ resource "kubectl_manifest" "karpenter_node_template" {
 }
 
 # After that run the following commnads
-
+---------------------------------------------------
 terraform init
 
 terraform apply --auto-approve
-
+---------------------------------------------------
 # First Use
 
 Karpenter is now active and ready to begin provisioning nodes. Create some pods using a deployment, and watch Karpenter provision nodes in response.
 
 Before we can start interacting with the cluster, we need to update our local kubeconfig:
-
+================================================================================
 aws eks update-kubeconfig --name karpenter-demo
-
-======================================================================================================================================================================
+================================================================================
 
 # Automatic Node Provisioning
 
